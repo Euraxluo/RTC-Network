@@ -118,7 +118,7 @@ pub mod pallet {
     #[pallet::call]
     impl<T: Config> Pallet<T> {
         #[pallet::call_index(2)]
-		#[pallet::weight(0)]
+        #[pallet::weight(0)]
         // #[pallet::weight(T::WeightInfo::create_claim())]
         pub fn create_claim(origin: OriginFor<T>, claim: T::Hash) -> DispatchResult {
             // Check that the extrinsic was signed and get the signer.
@@ -148,7 +148,7 @@ pub mod pallet {
         }
 
         #[pallet::call_index(3)]
-		#[pallet::weight(0)]
+        #[pallet::weight(0)]
         // #[pallet::weight(T::WeightInfo::revoke_claim())]
         pub fn revoke_claim(origin: OriginFor<T>, claim: T::Hash) -> DispatchResult {
             // Check that the extrinsic was signed and get the signer.
@@ -174,10 +174,14 @@ pub mod pallet {
             Ok(())
         }
 
-		#[pallet::call_index(4)]
-		#[pallet::weight(0)]
+        #[pallet::call_index(4)]
+        #[pallet::weight(0)]
         // #[pallet::weight(T::WeightInfo::transfer_claim())]
-        pub fn transfer_claim(origin: OriginFor<T>, to:T::AccountId,claim: T::Hash) -> DispatchResult {
+        pub fn transfer_claim(
+            origin: OriginFor<T>,
+            to: T::AccountId,
+            claim: T::Hash,
+        ) -> DispatchResult {
             // Check that the extrinsic was signed and get the signer.
             // This function will return an error if the extrinsic is not signed.
             // https://docs.substrate.io/main-docs/build/origins/
@@ -191,21 +195,20 @@ pub mod pallet {
 
             // Remove claim from storage.
             Claims::<T>::remove(&claim);
-			
+
             let current_block = <frame_system::Pallet<T>>::block_number();
             // Store the claim with the sender and block number.
             Claims::<T>::insert(&claim, (to.clone(), current_block));
 
             // Emit an event.
-            Self::deposit_event(Event::ClaimTransfered{
-				sender:who,
-				receiver:to,
-				claim:claim
-			});
+            Self::deposit_event(Event::ClaimTransfered {
+                sender: who,
+                receiver: to,
+                claim: claim,
+            });
             // Return a successful DispatchResultWithPostInfo
             Ok(())
         }
-
 
         /// An example dispatchable that takes a singles value as a parameter, writes the value to
         /// storage and emits an event. This function must be dispatched by a signed extrinsic.
