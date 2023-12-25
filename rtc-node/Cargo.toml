@@ -1,0 +1,17 @@
+[workspace.package]
+authors = ["Euraxluo <https://github.com/Euraxluo>"]
+repository = "https://github.com/Euraxluo/RTC-network"
+homepage = "https://github.com/Euraxluo/RTC-network"
+license = "MIT"
+edition = "2021"
+version = "0.0.1"
+publish = false
+
+[workspace]
+members = [
+    "node",
+    "pallets/*",
+    "runtime",
+]
+[profile.release]
+panic = "unwind"
